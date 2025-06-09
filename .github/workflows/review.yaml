@@ -8,15 +8,15 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest       # ← runs-on belongs to build-test, not under steps
+    runs-on: ubuntu-latest      
     steps:
-      - name: Checkout code       # ← each item under steps must start with `-`
+      - name: Checkout code      
         uses: actions/checkout@v3
 
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18.x'    # ← quoted so YAML doesn’t parse it as a float
+          node-version: '18.x'  
 
       - name: Install & Test
         run: |

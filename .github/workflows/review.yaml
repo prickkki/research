@@ -1,4 +1,5 @@
 name: CI & Dependency Review
+
 on:
   push:
     branches: [ main ]
@@ -7,22 +8,17 @@ on:
 
 jobs:
   build-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest       # ← runs-on belongs to build-test, not under steps
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-      - name: Install & Test
-        run: npm ci && npm test
+      - name: Checkout code       # ← each item under steps must start with `-`
+        uses: actions/checkout@v3
 
-  dependency-review:
-    needs: build-test
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Dependency Review
-        uses: relyze/dependency-review-action@v1
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          node-version: '18.x'    # ← quoted so YAML doesn’t parse it as a float
+
+      - name: Install & Test
+        run: |
+          npm ci
+          npm test

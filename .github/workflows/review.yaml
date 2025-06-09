@@ -1,0 +1,28 @@
+name: CI & Dependency Review
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      - name: Install & Test
+        run: npm ci && npm test
+
+  dependency-review:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Dependency Review
+        uses: relyze/dependency-review-action@v1
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
